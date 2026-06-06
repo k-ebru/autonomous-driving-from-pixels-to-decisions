@@ -98,10 +98,10 @@ bash scripts/run_all.sh
 ### 4. Evaluate a trained model
 
 ```bash
-python -m src.evaluate --config configs/model_A.yaml --model-path runs/model_A/best_model.zip
+python -m src.evaluate --config configs/model_A.yaml --model-path runs/model_A/models/best_model.zip
 ```
 
-This runs the three evaluation protocols from the report: ten stochastic episodes on the training seed, five deterministic episodes, and ten stochastic episodes on unseen seeds for generalisation.
+This runs the three evaluation protocols from the report: ten stochastic episodes on the evaluation seed, five deterministic episodes on the same seed, and ten stochastic episodes on unseen seeds for generalisation.
 
 ### 5. Record a GIF of the trained agent
 
