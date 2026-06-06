@@ -171,6 +171,3 @@ Training was capped at one hour per run to keep the sensitivity comparison fair,
 * Schulman, J., Wolski, F., Dhariwal, P., Radford, A., and Klimov, O. (2017). *Proximal policy optimization algorithms*. arXiv:1707.06347.
 * Stable Baselines3. (2026). *PPO documentation*. https://stable-baselines3.readthedocs.io/en/master/modules/ppo.html
 
-## License
-
-MIT. See [LICENSE](LICENSE).
