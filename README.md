@@ -1,14 +1,8 @@
 # Driving with Data: PPO Sensitivity Analysis on CarRacing v3
 
-<p align="center">
-  <img src="results/agent.gif" alt="Trained PPO agent driving on an unseen CarRacing v3 track" width="480"/>
-  <br/>
-  <em>Trained PPO agent (Model A) driving on an unseen track. Record locally with <code>src/record_gif.py</code>.</em>
-</p>
-
 Deep reinforcement learning for autonomous driving in the Gymnasium `CarRacing-v3` environment, using Proximal Policy Optimisation (PPO) with a CNN policy. The repository contains a clean, config driven training pipeline and a three way sensitivity study over temporal frame stacking and the PPO clipping range.
 
-Originally produced as coursework for the *Deep Learning for Autonomous Decision Making* module at Cranfield University (2025 to 2026). The full written report is available in [`report/`](report/).
+Originally produced as coursework for the *Deep Learning for Autonomous Decision Making* module at Cranfield University (2025 to 2026).
 
 ## TL;DR
 
@@ -72,8 +66,6 @@ carracing-ppo-drl/
 ├── scripts/
 │   └── run_all.sh        # run all three configurations sequentially
 ├── results/              # figures from the sensitivity study
-├── report/
-│   └── DLADM_report.pdf  # full written report
 ├── requirements.txt
 ├── LICENSE
 └── README.md
@@ -158,9 +150,10 @@ Reported metrics include mean reward, KL divergence, explained variance, value l
 
 ## Headline findings
 
-* **Six frames beats four.** With `n_stack = 4`, reward increases early but degrades after roughly 300,000 steps, accompanied by larger KL spikes and value loss oscillations. Limited temporal information leaves the value function unable to estimate motion reliably.
-* **Tighter clipping is more reliable.** Raising `clip_range` from 0.20 to 0.25 accelerates early reward growth but introduces aggressive policy updates. The most striking evidence is the deterministic test: Model A scores 602.5 while Model C drops to 182.0.
-* **Generalisation tracks training stability.** Model A's low generalisation variance (std 54.9) confirms that a stable optimisation trajectory transfers to unseen tracks.
+* **Six frames beats four.** With `n_stack = 4`, reward increases early but degrades after roughly 300,000 steps, accompanied by larger KL spikes and value loss oscillations (Figures 3 and 4). The interpretation is physical rather than statistical: motion perception requires information about speed, direction change, and track curvature over time, and a four frame window leaves the value function unable to estimate these reliably. The learning rate also confirms this. Model A reaches the highest reward gain rate at 0.001209 per timestep, against 0.000463 for the four frame model.
+* **Tighter clipping is more reliable.** Raising `clip_range` from 0.20 to 0.25 accelerates early reward growth because larger policy updates are allowed per epoch, but introduces aggressive updates that show up as KL and policy loss spikes (Figures 3 and 6). The clearest evidence is the deterministic test, where Model A scores 602.5 while Model C drops to 182.0. The stochastic versus deterministic gap for Model C (653.5 to 182.0) suggests that the larger clipping range produced a policy whose mean action is brittle even though sampled actions occasionally recover the reward.
+* **Generalisation tracks training stability.** On ten unseen seeds, Model A reaches 849.9 reward with a standard deviation of 54.9, while Model C reaches 754.8 with a standard deviation of 174.4. Lower variance during training transfers directly to more consistent behaviour on new tracks, which is the property that matters for an autonomous driving policy.
+* **Explained variance is a leading indicator.** All three models reach explained variance close to one early in training (Figure 5), but the four frame model shows transient drops during the same window where its reward declines. The value function losing predictive accuracy on its own returns is a useful early warning of state representation insufficiency.
 
 ## Limitations
 
