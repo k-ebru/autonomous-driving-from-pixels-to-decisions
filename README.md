@@ -68,7 +68,6 @@ autonomous-driving-from-pixels-to-decisions/
 │   └── run_all.sh        # run all three configurations sequentially
 ├── results/              # figures from the sensitivity study
 ├── requirements.txt
-├── LICENSE
 └── README.md
 ```
 
