@@ -23,19 +23,19 @@ Model A reaches a generalisation capacity of approximately 94 percent relative t
 
 <table>
   <tr>
-    <td align="center"><img src="results/fig1_mean_reward.png" alt="Mean reward" width="420"/><br/><sub>Figure 1. Mean reward comparison</sub></td>
-    <td align="center"><img src="results/fig2_learning_curve.png" alt="Learning curve" width="420"/><br/><sub>Figure 2. Smoothed learning curves</sub></td>
+    <td align="center"><img src="results/fig1_mean_reward.png" alt="Mean reward" width="420"/><br/><sub>Figure 1. Mean Reward Comparison Between Models</sub></td>
+    <td align="center"><img src="results/fig2_learning_curve.png" alt="Learning curve" width="420"/><br/><sub>Figure 2. Learning Curve Comparison Between Models</sub></td>
   </tr>
   <tr>
-    <td align="center"><img src="results/fig3_kl_divergence.png" alt="KL divergence" width="420"/><br/><sub>Figure 3. KL divergence per model</sub></td>
-    <td align="center"><img src="results/fig4_value_loss.png" alt="Value loss" width="420"/><br/><sub>Figure 4. Value loss per model</sub></td>
+    <td align="center"><img src="results/fig3_kl_divergence.png" alt="KL divergence" width="420"/><br/><sub>Figure 3. KL Divergence Comparison Between Models</sub></td>
+    <td align="center"><img src="results/fig4_value_loss.png" alt="Value loss" width="420"/><br/><sub>Figure 4. Value Loss Comparison Between Models</sub></td>
   </tr>
   <tr>
-    <td align="center"><img src="results/fig5_explained_variance.png" alt="Explained variance" width="420"/><br/><sub>Figure 5. Explained variance</sub></td>
-    <td align="center"><img src="results/fig6_policy_loss.png" alt="Policy loss" width="420"/><br/><sub>Figure 6. Policy loss</sub></td>
+    <td align="center"><img src="results/fig5_explained_variance.png" alt="Explained variance" width="420"/><br/><sub>Figure 5. Explained Variance Comparison Between Models</sub></td>
+    <td align="center"><img src="results/fig6_policy_loss.png" alt="Policy loss" width="420"/><br/><sub>Figure 6. Policy Loss Comparison Between Models</sub></td>
   </tr>
   <tr>
-    <td align="center" colspan="2"><img src="results/fig7_final_performance.png" alt="Final performance" width="780"/><br/><sub>Figure 7. Stochastic, deterministic, and generalisation rewards</sub></td>
+    <td align="center" colspan="2"><img src="results/fig7_final_performance.png" alt="Final performance" width="780"/><br/><sub>Figure 7. Final Performance Comparison Between Models</sub></td>
   </tr>
 </table>
 
@@ -81,8 +81,6 @@ python -m venv .venv
 source .venv/bin/activate          # on Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 ```
-
-`CarRacing-v3` requires Box2D. On most systems `pip install gymnasium[box2d]` is sufficient. On Windows you may need the Microsoft C++ Build Tools.
 
 ### 2. Train a single configuration
 
@@ -152,9 +150,9 @@ Reported metrics include mean reward, KL divergence, explained variance, value l
 ## Headline findings
 
 * **Six frames beats four.** With `n_stack = 4`, reward increases early but degrades after roughly 300,000 steps, accompanied by larger KL spikes and value loss oscillations (Figures 3 and 4). The interpretation is physical rather than statistical: motion perception requires information about speed, direction change, and track curvature over time, and a four frame window leaves the value function unable to estimate these reliably. The learning rate also confirms this. Model A reaches the highest reward gain rate at 0.001209 per timestep, against 0.000463 for the four frame model.
-* **Tighter clipping is more reliable.** Raising `clip_range` from 0.20 to 0.25 accelerates early reward growth because larger policy updates are allowed per epoch, but introduces aggressive updates that show up as KL and policy loss spikes (Figures 3 and 6). The clearest evidence is the deterministic test, where Model A scores 602.5 while Model C drops to 182.0. The stochastic versus deterministic gap for Model C (653.5 to 182.0) suggests that the larger clipping range produced a policy whose mean action is brittle even though sampled actions occasionally recover the reward.
-* **Generalisation tracks training stability.** On ten unseen seeds, Model A reaches 849.9 reward with a standard deviation of 54.9, while Model C reaches 754.8 with a standard deviation of 174.4. Lower variance during training transfers directly to more consistent behaviour on new tracks, which is the property that matters for an autonomous driving policy.
-* **Explained variance is a leading indicator.** All three models reach explained variance close to one early in training (Figure 5), but the four frame model shows transient drops during the same window where its reward declines. The value function losing predictive accuracy on its own returns is a useful early warning of state representation insufficiency.
+* **Tighter clipping is more reliable.** Raising `clip_range` from 0.20 to 0.25 accelerates early reward growth because larger policy updates are allowed per epoch, but introduces aggressive updates that show up as KL and policy loss spikes (Figures 3 and 6). The clearest evidence is the deterministic test, where Model A scores 602.5 while Model C drops to 182.0.
+* **Generalisation tracks training stability.** On ten unseen seeds, Model A reaches 849.9 reward with a standard deviation of 54.9, while Model C reaches 754.8 with a standard deviation of 174.4. Models with more stacked frames captured temporal dynamics more effectively, which improved both learning stability and generalisation (PDF section 5.3).
+* **Explained variance drops in the four frame model.** All three models reach explained variance close to one early in training (Figure 5), but a significant drop is observed in the four frame configuration, consistent with reduced temporal information (PDF section 5.1).
 
 ## Limitations
 
@@ -176,7 +174,3 @@ Training was capped at one hour per run to keep the sensitivity comparison fair,
 ## License
 
 MIT. See [LICENSE](LICENSE).
-
-## Author
-
-Ebru Kilic. Cranfield University, MSc Computational Intelligence and Robotics (2025 to 2026).
