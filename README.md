@@ -1,5 +1,11 @@
 # Driving with Data: PPO Sensitivity Analysis on CarRacing v3
 
+<p align="center">
+  <img src="results/agent.gif" alt="Trained PPO agent driving on an unseen CarRacing v3 track" width="480"/>
+  <br/>
+  <em>Trained PPO agent (Model A) driving on an unseen track. Record locally with <code>src/record_gif.py</code>.</em>
+</p>
+
 Deep reinforcement learning for autonomous driving in the Gymnasium `CarRacing-v3` environment, using Proximal Policy Optimisation (PPO) with a CNN policy. The repository contains a clean, config driven training pipeline and a three way sensitivity study over temporal frame stacking and the PPO clipping range.
 
 Originally produced as coursework for the *Deep Learning for Autonomous Decision Making* module at Cranfield University (2025 to 2026). The full written report is available in [`report/`](report/).
@@ -17,6 +23,26 @@ The driving task is modelled as a Markov Decision Process and solved with PPO on
 | `n_stack = 4`, `clip = 0.20` (Model B) | 622,592 | 572.2 | 267.3 | 652.5 | 82.5 |
 
 Model A reaches a generalisation capacity of approximately 94 percent relative to the official 900 point solved threshold defined in the Gymnasium CarRacing environment (Farama Foundation, 2025).
+
+### Training curves and final performance
+
+<table>
+  <tr>
+    <td align="center"><img src="results/fig1_mean_reward.png" alt="Mean reward" width="420"/><br/><sub>Figure 1. Mean reward comparison</sub></td>
+    <td align="center"><img src="results/fig2_learning_curve.png" alt="Learning curve" width="420"/><br/><sub>Figure 2. Smoothed learning curves</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="results/fig3_kl_divergence.png" alt="KL divergence" width="420"/><br/><sub>Figure 3. KL divergence per model</sub></td>
+    <td align="center"><img src="results/fig4_value_loss.png" alt="Value loss" width="420"/><br/><sub>Figure 4. Value loss per model</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="results/fig5_explained_variance.png" alt="Explained variance" width="420"/><br/><sub>Figure 5. Explained variance</sub></td>
+    <td align="center"><img src="results/fig6_policy_loss.png" alt="Policy loss" width="420"/><br/><sub>Figure 6. Policy loss</sub></td>
+  </tr>
+  <tr>
+    <td align="center" colspan="2"><img src="results/fig7_final_performance.png" alt="Final performance" width="780"/><br/><sub>Figure 7. Stochastic, deterministic, and generalisation rewards</sub></td>
+  </tr>
+</table>
 
 ## Problem formulation
 
@@ -41,9 +67,11 @@ carracing-ppo-drl/
 │   ├── callbacks.py      # TimeLimitCallback, linear_schedule
 │   ├── env_utils.py      # make_env factory
 │   ├── train.py          # config driven training entry point
-│   └── evaluate.py       # stochastic, deterministic, generalisation tests
+│   ├── evaluate.py       # stochastic, deterministic, generalisation tests
+│   └── record_gif.py     # record a driving GIF from a trained checkpoint
 ├── scripts/
 │   └── run_all.sh        # run all three configurations sequentially
+├── results/              # figures from the sensitivity study
 ├── report/
 │   └── DLADM_report.pdf  # full written report
 ├── requirements.txt
@@ -85,7 +113,17 @@ python -m src.evaluate --config configs/model_A.yaml --model-path runs/model_A/b
 
 This runs the three evaluation protocols from the report: ten stochastic episodes on the training seed, five deterministic episodes, and ten stochastic episodes on unseen seeds for generalisation.
 
-### 5. Watch training in TensorBoard
+### 5. Record a GIF of the trained agent
+
+```bash
+python -m src.record_gif \
+    --config configs/model_A.yaml \
+    --model-path runs/model_A/models/best_model.zip \
+    --output results/agent.gif \
+    --seed 101 --max-steps 1000 --fps 30
+```
+
+### 6. Watch training in TensorBoard
 
 ```bash
 tensorboard --logdir runs/
