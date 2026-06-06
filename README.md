@@ -2,7 +2,6 @@
 
 Deep reinforcement learning for autonomous driving in the Gymnasium `CarRacing-v3` environment, using Proximal Policy Optimisation (PPO) with a CNN policy. The repository contains a clean, config driven training pipeline and a three way sensitivity study over temporal frame stacking and the PPO clipping range.
 
-Originally produced as coursework for the *Deep Learning for Autonomous Decision Making* module at Cranfield University (2025 to 2026).
 
 ## TL;DR
 
