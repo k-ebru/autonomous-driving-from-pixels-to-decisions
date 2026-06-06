@@ -1,4 +1,6 @@
-# Driving with Data: PPO Sensitivity Analysis on CarRacing v3
+# Autonomous Driving: From Pixels to Decisions
+
+A PPO sensitivity study on Gymnasium `CarRacing-v3`.
 
 Deep reinforcement learning for autonomous driving in the Gymnasium `CarRacing-v3` environment, using Proximal Policy Optimisation (PPO) with a CNN policy. The repository contains a clean, config driven training pipeline and a three way sensitivity study over temporal frame stacking and the PPO clipping range.
 
