@@ -17,7 +17,7 @@ The driving task is modelled as a Markov Decision Process and solved with PPO on
 | `n_stack = 6`, `clip = 0.25` (Model C) | 651,264 | 653.5 | 182.0 | 754.8 | 174.4 |
 | `n_stack = 4`, `clip = 0.20` (Model B) | 622,592 | 572.2 | 267.3 | 652.5 | 82.5 |
 
-Model A reaches a generalisation capacity of approximately 94 percent relative to the official 900 point solved threshold defined in the Gymnasium CarRacing environment (Farama Foundation, 2025).
+Model A reaches a generalisation capacity of approximately 94 percent relative to the official 900 point solved threshold defined in the Gymnasium CarRacing environment.
 
 ### Training curves and final performance
 
@@ -43,11 +43,11 @@ Model A reaches a generalisation capacity of approximately 94 percent relative t
 
 The driving task is modelled as a Markov Decision Process `M = (S, A, P, R, γ)`:
 
-* **State.** Six stacked grayscale frames resized to 84 by 84, giving `s_t ∈ R^(6 × 84 × 84)`. Stacking is required because vehicle dynamics depend on velocity, which cannot be inferred from a single frame (Inamdar et al., 2024).
-* **Action.** Continuous control `a_t = [steer, gas, brake]` with `steer ∈ [-1, 1]`, `gas ∈ [0, 1]`, `brake ∈ [0, 1]` (Farama Foundation, 2025).
+* **State.** Six stacked grayscale frames resized to 84 by 84, giving `s_t ∈ R^(6 × 84 × 84)`. Stacking is required because vehicle dynamics depend on velocity, which cannot be inferred from a single frame.
+* **Action.** Continuous control `a_t = [steer, gas, brake]` with `steer ∈ [-1, 1]`, `gas ∈ [0, 1]`, `brake ∈ [0, 1]`.
 * **Reward.** Provided by the environment: positive when a new track tile is visited, with a small penalty of -0.1 at every step.
 
-PPO is selected over off policy alternatives such as SAC for its stability oriented clipped surrogate objective, which is well suited to control tasks where abrupt policy changes can destabilise the vehicle (Schulman et al., 2017; Muzahid et al., 2021).
+PPO is selected over off policy alternatives such as SAC for its stability oriented clipped surrogate objective, which is well suited to control tasks where abrupt policy changes can destabilise the vehicle.
 
 ## Repository layout
 
@@ -123,11 +123,11 @@ tensorboard --logdir runs/
 
 ### State representation
 
-Driving is a continuous process where the vehicle state evolves over time. A single visual observation cannot capture motion related variables such as velocity or direction change. Stacking six consecutive frames allows the agent to implicitly estimate speed and trajectory evolution, which is essential for stable control (Inamdar et al., 2024).
+Driving is a continuous process where the vehicle state evolves over time. A single visual observation cannot capture motion related variables such as velocity or direction change. Stacking six consecutive frames allows the agent to implicitly estimate speed and trajectory evolution, which is essential for stable control.
 
 ### Action space
 
-A continuous action space is used because discrete actions limit control precision and tend to produce unstable driving behaviour. Vehicle motion is constrained by physical limits such as tyre friction and steering smoothness, so gradual control adjustments better reflect realistic driving dynamics (Lillicrap et al., 2015).
+A continuous action space is used because discrete actions limit control precision and tend to produce unstable driving behaviour. Vehicle motion is constrained by physical limits such as tyre friction and steering smoothness, so gradual control adjustments better reflect realistic driving dynamics.
 
 ### Sensitivity dimensions
 
@@ -155,17 +155,4 @@ Reported metrics include mean reward, KL divergence, explained variance, value l
 
 ## Limitations
 
-Training was capped at one hour per run to keep the sensitivity comparison fair, which prevented full convergence. The environment reward function was used as is, with no reward shaping. Both choices are documented limitations in the report.
-
-## References
-
-* El Sallab, A., Abdou, M., Perot, E., and Yogamani, S. (2017). Deep reinforcement learning framework for autonomous driving. *IS&T Electronic Imaging: Autonomous Vehicles and Machines*.
-* Farama Foundation. (2025). *Car Racing environment documentation*. https://gymnasium.farama.org/environments/box2d/car_racing/
-* Inamdar, R., Sundarr, S. K., Khandelwal, D., Sahu, V. D., and Katal, N. (2024). A comprehensive review on safe reinforcement learning for autonomous vehicle control in dynamic environments. *Results in Engineering*, 22, 100810.
-* Lillicrap, T. P. et al. (2015). *Continuous control with deep reinforcement learning*. arXiv:1509.02971.
-* Liu, Q., Jiang, Z., Yang, H. J., Khosravi, M., Waite, J. R., and Sarkar, S. (2025). *Enhancing PPO with trajectory aware hybrid policies*. arXiv:2502.15968.
-* Mnih, V. et al. (2015). Human level control through deep reinforcement learning. *Nature*, 518(7540), 529 to 533.
-* Muzahid, A. J. M., Kamarulzaman, S. F., and Rahman, M. A. (2021). Comparison of PPO and SAC algorithms towards decision making strategies for collision avoidance among multiple autonomous vehicles. *ICSECS ICOCSIM*.
-* Schulman, J., Wolski, F., Dhariwal, P., Radford, A., and Klimov, O. (2017). *Proximal policy optimization algorithms*. arXiv:1707.06347.
-* Stable Baselines3. (2026). *PPO documentation*. https://stable-baselines3.readthedocs.io/en/master/modules/ppo.html
-
+Training was capped at one hour per run to keep the sensitivity comparison fair, which prevented full convergence. The environment reward function was used as is, with no reward shaping.
