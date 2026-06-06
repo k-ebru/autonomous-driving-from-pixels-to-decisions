@@ -144,14 +144,14 @@ Three complementary tests are run on every trained policy:
 2. **Deterministic stability.** Five episodes with mean actions, to measure consistency of the learned policy.
 3. **Generalisation.** Ten episodes on unseen track seeds (`[101, 202, 303, 404, 505, 606, 707, 808, 909, 1000]`).
 
-Reported metrics include mean reward, KL divergence, explained variance, value loss, and policy loss (Czworkowski et al., 2026; Liu et al., 2025).
+Reported metrics include mean reward, KL divergence, explained variance, value loss, and policy loss.
 
 ## Headline findings
 
 * **Six frames beats four.** With `n_stack = 4`, reward increases early but degrades after roughly 300,000 steps, accompanied by larger KL spikes and value loss oscillations (Figures 3 and 4). The interpretation is physical rather than statistical: motion perception requires information about speed, direction change, and track curvature over time, and a four frame window leaves the value function unable to estimate these reliably. The learning rate also confirms this. Model A reaches the highest reward gain rate at 0.001209 per timestep, against 0.000463 for the four frame model.
 * **Tighter clipping is more reliable.** Raising `clip_range` from 0.20 to 0.25 accelerates early reward growth because larger policy updates are allowed per epoch, but introduces aggressive updates that show up as KL and policy loss spikes (Figures 3 and 6). The clearest evidence is the deterministic test, where Model A scores 602.5 while Model C drops to 182.0.
-* **Generalisation tracks training stability.** On ten unseen seeds, Model A reaches 849.9 reward with a standard deviation of 54.9, while Model C reaches 754.8 with a standard deviation of 174.4. Models with more stacked frames captured temporal dynamics more effectively, which improved both learning stability and generalisation (PDF section 5.3).
-* **Explained variance drops in the four frame model.** All three models reach explained variance close to one early in training (Figure 5), but a significant drop is observed in the four frame configuration, consistent with reduced temporal information (PDF section 5.1).
+* **Generalisation tracks training stability.** On ten unseen seeds, Model A reaches 849.9 reward with a standard deviation of 54.9, while Model C reaches 754.8 with a standard deviation of 174.4. Models with more stacked frames captured temporal dynamics more effectively, which improved both learning stability and generalisation.
+* **Explained variance drops in the four frame model.** All three models reach explained variance close to one early in training (Figure 5), but a significant drop is observed in the four frame configuration, consistent with reduced temporal information.
 
 ## Limitations
 
@@ -159,7 +159,6 @@ Training was capped at one hour per run to keep the sensitivity comparison fair,
 
 ## References
 
-* Czworkowski, C., Hornish, S., and Yasin, A. S. (2026). *Proximal policy optimization with evolutionary mutations*. arXiv:2601.14705.
 * El Sallab, A., Abdou, M., Perot, E., and Yogamani, S. (2017). Deep reinforcement learning framework for autonomous driving. *IS&T Electronic Imaging: Autonomous Vehicles and Machines*.
 * Farama Foundation. (2025). *Car Racing environment documentation*. https://gymnasium.farama.org/environments/box2d/car_racing/
 * Inamdar, R., Sundarr, S. K., Khandelwal, D., Sahu, V. D., and Katal, N. (2024). A comprehensive review on safe reinforcement learning for autonomous vehicle control in dynamic environments. *Results in Engineering*, 22, 100810.
