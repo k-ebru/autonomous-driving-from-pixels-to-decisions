@@ -52,7 +52,7 @@ PPO is selected over off policy alternatives such as SAC for its stability orien
 ## Repository layout
 
 ```
-carracing-ppo-drl/
+autonomous-driving-from-pixels-to-decisions/
 ├── configs/
 │   ├── model_A.yaml      # n_stack=6, clip_range=0.20
 │   ├── model_B.yaml      # n_stack=4, clip_range=0.20
