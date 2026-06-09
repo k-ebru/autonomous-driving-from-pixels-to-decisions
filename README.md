@@ -9,6 +9,15 @@ Deep reinforcement learning for autonomous driving in the Gymnasium `CarRacing-v
 
 The driving task is modelled as a Markov Decision Process and solved with PPO on raw pixels. Three configurations were trained for one hour each and compared on stochastic reward, deterministic stability, and generalisation to ten unseen track seeds. The best configuration (`n_stack = 6`, `clip_range = 0.20`) reaches roughly 94 percent of the official solved threshold (900) on unseen tracks.
 
+![Final performance comparison](results/fig7_final_performance.png)
+
+## What I found
+
+The strongest result came from the model with six stacked frames and a tighter
+PPO clipping range. Six frames gave the policy more motion information, and the
+smaller clipping range made training more stable. The project is mainly a
+sensitivity study, not just a single training run.
+
 ## Results
 
 | Configuration | Total steps | Stochastic reward | Deterministic reward | Generalisation mean | Generalisation std |
@@ -156,3 +165,7 @@ Reported metrics include mean reward, KL divergence, explained variance, value l
 ## Limitations
 
 Training was capped at one hour per run to keep the sensitivity comparison fair, which prevented full convergence. The environment reward function was used as is, with no reward shaping.
+
+## License
+
+The project code is released under the MIT License.
